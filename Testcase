@@ -1,0 +1,37 @@
+package parameterization;
+
+import java.io.FileInputStream;
+import com.vel.test.Configurations;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class TC01 {
+
+	public static void main(String[] args) throws IOException, InterruptedException {
+		FileInputStream file=new FileInputStream(Configurations.excelsheetpath);
+		Sheet sh=WorkbookFactory.create(file).getSheet("sheet1");
+		String userName=sh.getRow(0).getCell(0).getStringCellValue();
+		System.out.println(userName);
+		String userName1=sh.getRow(0).getCell(1).getStringCellValue();
+		System.out.println(userName);
+		
+		System.setProperty("webdriver.chrome.driver", Configurations.driverpath);
+		WebDriver driver= new ChromeDriver();
+		driver.get(Configurations.appURL);
+		driver.manage().window().maximize();
+		driver.findElement(By.xpath("(//input[@type='text'])[2]")).sendKeys(userName);
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//input[@type='password']")).sendKeys(userName1);
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("(//button[@type='submit'])[2]")).click();
+		
+
+	}
+
+}
